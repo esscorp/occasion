@@ -25,7 +25,10 @@ exports.mdy2iso = function(dateStr) {
 // convert date string to start of day string
 exports.startOfDay = function(dateStr, tzIn, tzOut) {
 
-	Prove('SSS', arguments);
+	// validate & set defaults
+	if (!dateStr) return '';
+	if (typeof tzIn !== 'string') tzIn = 'UTC';
+	if (typeof tzOut !== 'string') tzOut = 'UTC';
 
 	var moment = Moment
 		.tz(dateStr, tzIn)
@@ -38,7 +41,10 @@ exports.startOfDay = function(dateStr, tzIn, tzOut) {
 // convert date string to end of day string
 exports.endOfDay = function(dateStr, tzIn, tzOut) {
 
-	Prove('SSS', arguments);
+	// validate & set defaults
+	if (!dateStr) return '';
+	if (typeof tzIn !== 'string') tzIn = 'UTC';
+	if (typeof tzOut !== 'string') tzOut = 'UTC';
 
 	var moment = Moment
 		.tz(dateStr, tzIn)
@@ -49,11 +55,15 @@ exports.endOfDay = function(dateStr, tzIn, tzOut) {
 };
 
 
-exports.startOfMonthClamped = function(str, range, tzIn, tzOut) {
+exports.startOfMonthClamped = function(dateStr, range, tzIn, tzOut) {
 
-	Prove('sNSS', arguments);
+	// validate & set defaults
+	if (!dateStr) return '';
+	if (typeof range !== 'number') range = 7;
+	if (typeof tzIn !== 'string') tzIn = 'UTC';
+	if (typeof tzOut !== 'string') tzOut = 'UTC';
 
-	var now = Moment.tz(str, tzIn);
+	var now = Moment.tz(dateStr, tzIn);
 	var day = now.date();
 	var lower = 1 + range;
 	var upper = 31 - range;
@@ -84,10 +94,12 @@ exports.startOfMonthClamped = function(str, range, tzIn, tzOut) {
 // split interval into expr and unit
 exports.interval = function(str) {
 
-	Prove('S', arguments);
+	// validate & set defaults
+	if (!str) str = '0 DAY';
+	if (typeof str !== 'string') str = '0 DAY';
 
 	var parts = str.split(' ');
-	var sign, expr, unit;
+	var sign, expr, unit, interval;
 
 	if (parts.length < 2) {
 		return false;
@@ -101,19 +113,22 @@ exports.interval = function(str) {
 		unit = parts[2];
 	}
 
-	return {
+	interval = {
 		sign: sign,
 		expr: expr,
 		unit: unit
 	};
+
+	return interval;
 };
 
 exports.addInterval = function(dateStr, intervalStr) {
 
-	Prove('SS', arguments);
+	// validate & set defaults
+	if (!intervalStr) intervalStr = '0 DAY';
 
-	var moment = Moment.tz(dateStr);
-	var interval = exports.inverval(intervalStr);
+	var moment = Moment.tz(dateStr, 'UTC');
+	var interval = exports.interval(intervalStr);
 
 	if (interval.sign === '+') {
 		return moment
@@ -121,21 +136,22 @@ exports.addInterval = function(dateStr, intervalStr) {
 		.format(fmt);
 	} else {
 		return moment
-		.sub(interval.expr, interval.unit)
+		.subtract(interval.expr, interval.unit)
 		.format(fmt);
 	}
 };
 
 exports.subInterval = function(dateStr, intervalStr) {
 
-	Prove('SS', arguments);
+	// validate & set defaults
+	if (!intervalStr) intervalStr = '0 DAY';
 
-	var moment = Moment.tz(dateStr);
-	var interval = exports.inverval(intervalStr);
+	var moment = Moment.tz(dateStr, 'UTC');
+	var interval = exports.interval(intervalStr);
 
 	if (interval.sign === '+') {
 		return moment
-		.sub(interval.expr, interval.unit)
+		.subtract(interval.expr, interval.unit)
 		.format(fmt);
 	} else {
 		return moment
