@@ -1,18 +1,16 @@
 'use strict';
 
 var Moment = require('moment-timezone');
+var Prove = require('provejs-params');
 // var tzIn = 'US/Central';
 // var tzOut = 'UTC';
 var tzFormat = 'YYYY-MM-DD HH:mm:ss';
 
-// ***** public function *****
+// convert an english date to iso date string
+exports.mdy2iso = function(dateStr) {
+	if (!dateStr) return '';
 
-
-//
-exports.mdy2iso = function(str) {
-	if (!str) return '';
-
-	var date = new Date(str);
+	var date = new Date(dateStr);
 
 	//setup
 	var year = date.getFullYear();
@@ -22,11 +20,15 @@ exports.mdy2iso = function(str) {
 	if (month < 10) month = '0' + month;
 	if (day < 10) day = '0' + day;
 
-	str = year + '-' + month + '-' + day;
-	return str;
+	dateStr = year + '-' + month + '-' + day;
+	return dateStr;
 };
 
+// convert date string to start of day string
 exports.startOfDay = function(dateStr, tzIn, tzOut) {
+
+	Prove('SSS', arguments);
+
 	var moment = Moment
 		.tz(dateStr, tzIn)
 		.startOf('day')
@@ -35,7 +37,11 @@ exports.startOfDay = function(dateStr, tzIn, tzOut) {
 	return moment;
 };
 
+// convert date string to end of day string
 exports.endOfDay = function(dateStr, tzIn, tzOut) {
+
+	Prove('SSS', arguments);
+
 	var moment = Moment
 		.tz(dateStr, tzIn)
 		.endOf('day')
@@ -44,23 +50,15 @@ exports.endOfDay = function(dateStr, tzIn, tzOut) {
 	return moment;
 };
 
-// Allow BON to seed audits in advance of opened date.
-// BON does not submit an audit opened date therefore, we
-// calcuate an audit opened date for them. If an audit is
-// seeded after the 15th of the month assume they want to
-// open the audit at the beginning of next month. If before
-// the 15th of the month assume they wanted beginning of the
-// current month. Not this can result in an audit.opened date
-// which is before the audit.created date. I see no problem
-// with this.
-exports.startOfMonthClamped = function(str, tzIn, tzOut) {
 
-	if (!str) str = new Date();
+exports.startOfMonthClamped = function(str, range, tzIn, tzOut) {
+
+	Prove('sNSS', arguments);
 
 	var now = Moment.tz(str, tzIn);
 	var day = now.date();
 
-	if (day < 15) {
+	if (day < range) {
 		return now
 		.startOf('month')
 		.startOf('day')
