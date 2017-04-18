@@ -1,5 +1,5 @@
 {
-  "name": "@esscorp/timestamps",
+  "name": "@esscorp/occasion",
   "version": "0.0.1",
   "description": "A Moment.js wrapper.",
   "main": "index.js",
@@ -15,5 +15,14 @@
   "bugs": {
     "url": "https://github.com/esscorp/timestamps/issues"
   },
-  "homepage": "https://github.com/esscorp/timestamps#readme"
+  "homepage": "https://github.com/esscorp/timestamps#readme",
+  "dependencies": {
+    "moment-timezone": "^0.5.13"
+  },
+  "devDependencies": {
+    "@esscorp/eslint": "^2.2.0",
+    "eslint": "^3.19.0",
+    "grunt": "^1.0.1",
+    "grunt-eslint": "^19.0.0"
+  }
 }
