@@ -2,8 +2,6 @@
 
 var Moment = require('moment-timezone');
 var Prove = require('provejs-params');
-// var tzIn = 'US/Central';
-// var tzOut = 'UTC';
 var fmt = 'YYYY-MM-DD HH:mm:ss';
 
 // convert an english date to iso date string
