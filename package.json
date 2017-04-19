@@ -1,6 +1,6 @@
 {
   "name": "@esscorp/occasion",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A Moment.js wrapper.",
   "main": "index.js",
   "scripts": {
