@@ -23,17 +23,17 @@ describe('Tests', function() {
 		it('should return 0 DAY interval when the value is not present', function() {
 			assert.equal(Occasion.interval().sign, '+');
 			assert.equal(Occasion.interval().expr, '0');
-			assert.equal(Occasion.interval().unit, 'DAY');
+			assert.equal(Occasion.interval().unit, 'days');
 		});
 		it('should return 0 DAY interval when the value is not a string', function() {
 			assert.equal(Occasion.interval(1).sign, '+');
 			assert.equal(Occasion.interval(1).expr, '0');
-			assert.equal(Occasion.interval(1).unit, 'DAY');
+			assert.equal(Occasion.interval(1).unit, 'days');
 		});
 		it('should return interval object when the value is 1 YEAR', function() {
 			assert.equal(Occasion.interval('1 YEAR').sign, '+');
 			assert.equal(Occasion.interval('1 YEAR').expr, '1');
-			assert.equal(Occasion.interval('1 YEAR').unit, 'YEAR');
+			assert.equal(Occasion.interval('1 YEAR').unit, 'years');
 		});
 	});
 

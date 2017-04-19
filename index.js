@@ -44,6 +44,18 @@ exports.interval = function(str) {
 		unit = parts[2];
 	}
 
+	// cleanup units to be moment.js compatiable
+	unit = unit.toLowerCase();
+	if (unit === 'year') unit = 'years';
+	if (unit === 'quarter') unit = 'quarters';
+	if (unit === 'month') unit = 'months';
+	if (unit === 'week') unit = 'weeks';
+	if (unit === 'day') unit = 'days';
+	if (unit === 'hour') unit = 'hours';
+	if (unit === 'minute') unit = 'minutes';
+	if (unit === 'second') unit = 'seconds';
+	if (unit === 'millisecond') unit = 'milliseconds';
+
 	interval = {
 		sign: sign,
 		expr: expr,
