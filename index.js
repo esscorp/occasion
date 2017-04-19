@@ -269,9 +269,9 @@ exports.auditRecipe = function(opened, intervals, tz) {
 
 	Prove('SOS', arguments);
 
-	var interval_open = intervals.interval_open;
-	var interval_licet = intervals.interval_licet;
-	var interval_carry = intervals.interval_carry;
+	var interval_open = intervals.open;
+	var interval_licet = intervals.licet;
+	var interval_carry = intervals.carryover;
 	var closed, period_max, period_min, carryover_max, carryover_min;
 
 	opened = exports.toIsoString(opened);

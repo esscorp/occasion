@@ -104,9 +104,9 @@ describe('Tests', function() {
 		var tz = 'US/Central';
 		var opened = '3/1/2017';
 		var intervals = {
-			interval_open: '1 MONTHS',
-			interval_licet: '1 MONTHS',
-			interval_carry: '1 MONTHS'
+			open: '1 MONTHS',
+			licet: '1 MONTHS',
+			carryover: '1 MONTHS'
 		};
 
 		var recipe = Occasion.auditRecipe(opened, intervals, tz);
