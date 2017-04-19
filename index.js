@@ -21,38 +21,6 @@ exports.toIsoString = function(dateStr) {
 	dateStr = year + '-' + month + '-' + day;
 	return dateStr;
 };
-//
-// // convert date string to start of day string
-// exports.startOfDay = function(dateStr, tzIn, tzOut) {
-//
-// 	// validate & set defaults
-// 	if (!dateStr) return '';
-// 	if (typeof tzIn !== 'string') tzIn = 'UTC';
-// 	if (typeof tzOut !== 'string') tzOut = 'UTC';
-//
-// 	var moment = Moment
-// 		.tz(dateStr, tzIn)
-// 		.startOf('day')
-// 		.tz(tzOut)
-// 		.format(format);
-// 	return moment;
-// };
-
-// // convert date string to end of day string
-// exports.endOfDay = function(dateStr, tzIn, tzOut) {
-//
-// 	// validate & set defaults
-// 	if (!dateStr) return '';
-// 	if (typeof tzIn !== 'string') tzIn = 'UTC';
-// 	if (typeof tzOut !== 'string') tzOut = 'UTC';
-//
-// 	var moment = Moment
-// 		.tz(dateStr, tzIn)
-// 		.endOf('day')
-// 		.tz(tzOut)
-// 		.format(format);
-// 	return moment;
-// };
 
 // split interval into expr and unit
 exports.interval = function(str) {
@@ -171,7 +139,7 @@ exports.auditOpened = function(opened, tz) {
  * Audits are closed at the end of the business day in the client's timezone.
  * However, we store the closed timestamp in the database in UTC.
  */
-exports.auditClosed = function(opened, interval, tz) {
+exports._auditClosed = function(opened, interval, tz) {
 
 	Prove('SSS', arguments);
 
@@ -197,7 +165,7 @@ exports.auditClosed = function(opened, interval, tz) {
  * Audits have a period max value which indicates when max time certificates date
  * are allowed. Currently, audit period max is simply the same as the audit closes timestamp.
  */
-exports.auditPeriodMax = function(closed) {
+exports._auditPeriodMax = function(closed) {
 
 	Prove('S', arguments);
 
@@ -217,30 +185,20 @@ exports.auditPeriodMax = function(closed) {
  *
  * Audits have a period min value which indicates when min time certificates date
  * are allowed.
+ *
+ * Note: we roll over to the start of the next day/month so the add/substract of the interval
+ * has less issues regarding what day of the month you start the calculation from.
  */
-exports.auditPeriodMin = function(period_max, interval, tz) {
+exports._auditPeriodMin = function(period_max, interval, tz) {
 
 	Prove('SSS', arguments);
 
 	var inval = exports.interval(interval);
 
-	// todo: we should be adding one second to move the timestamp to the beginning of
-	// the period before we substract the interval. Other you can have artifacts regarding
-	// the number of days in month of the interval substraction.
-
-	// var ts = Moment
-	// 	.tz(period_max, 'UTC')
-	// 	.tz(tz) // convert to client's timezone
-	// 	.subtract(inval.expr, inval.unit) // calculate min moment
-	// 	.add(1, 'day')  // add one day because we are removing one day when call startOf('day')
-	// 	.startOf('day')
-	// 	.tz('UTC') // convert back to UTC
-	// 	.format(format);
-
 	var ts = Moment
 		.tz(period_max, 'UTC')
 		.tz(tz) // convert to client's timezone
-		.add(1, 'seconds') // change to start of next day
+		.add(1, 'seconds') // change to start of next day/month
 		.subtract(inval.expr, inval.unit) // calculate min moment
 		.tz('UTC') // convert back to UTC
 		.format(format);
@@ -257,7 +215,7 @@ exports.auditPeriodMin = function(period_max, interval, tz) {
  * completed during previous licensure periods. Currently, audit carryover max is simply
  * the same as the audit closes timestamp.
  */
-exports.auditCarroverMax = function(period_min) {
+exports._auditCarroverMax = function(period_min) {
 
 	Prove('S', arguments);
 
@@ -271,7 +229,7 @@ exports.auditCarroverMax = function(period_min) {
 
 /**
  * Calculate audit carryover min timestamp.
- * @param {String} audit period_min timestamp string in iso format in UTC timezone.
+ * @param {String} audit carryover_max timestamp string in iso format in UTC timezone.
  * @param {String} positive carryover interval string.
  * @param {String} client's timezone name.
  * @return {String} timestamp in UTC indicating when audit carryover max should be.
@@ -279,10 +237,10 @@ exports.auditCarroverMax = function(period_min) {
  * Audits have an optional carryover period which users are allowed to input certificates
  * completed during previous licensure periods.
  *
- * Note: you must pass in period_min here otherwise you can have artifacts in the
- * subtract method when the number of days in the month causes problems.
+ * Note: we roll over to the start of the next day/month so the add/substract of the interval
+ * has less issues regarding what day of the month you start the calculation from.
  */
-exports.auditCarroverMin = function(carryover_max, interval, tz) {
+exports._auditCarroverMin = function(carryover_max, interval, tz) {
 
 	Prove('SSS', arguments);
 
@@ -318,11 +276,11 @@ exports.auditRecipe = function(opened, intervals, tz) {
 
 	opened = exports.toIsoString(opened);
 	opened = exports.auditOpened(opened, tz);
-	closed = exports.auditClosed(opened, interval_open, tz);
-	period_max = exports.auditPeriodMax(closed);
-	period_min = exports.auditPeriodMin(period_max, interval_licet, tz);
-	if (interval_carry) carryover_max = exports.auditCarroverMax(period_min);
-	if (interval_carry) carryover_min = exports.auditCarroverMin(carryover_max, interval_carry, tz);
+	closed = exports._auditClosed(opened, interval_open, tz);
+	period_max = exports._auditPeriodMax(closed);
+	period_min = exports._auditPeriodMin(period_max, interval_licet, tz);
+	if (interval_carry) carryover_max = exports._auditCarroverMax(period_min);
+	if (interval_carry) carryover_min = exports._auditCarroverMin(carryover_max, interval_carry, tz);
 
 	return {
 		opened: opened,

@@ -19,30 +19,6 @@ describe('Tests', function() {
 		});
 	});
 
-	// describe('exports.startOfDay()', function() {
-	// 	it('should return empty string when the value is not present', function() {
-	// 		assert.equal(Occasion.startOfDay(), '');
-	// 	});
-	// 	it('should return 1968-01-01 00:00:00 when the value is 1968-01-01 01:00:00', function() {
-	// 		assert.equal(Occasion.startOfDay('1968-01-01 01:00:00'), '1968-01-01 00:00:00');
-	// 	});
-	// 	it('should return 1968-01-01 06:00:00 when the value is 1968-01-01 00:00:00, US/Central, UTC', function() {
-	// 		assert.equal(Occasion.startOfDay('1968-01-01 00:00:00', 'US/Central', 'UTC'), '1968-01-01 06:00:00');
-	// 	});
-	// });
-
-	// describe('exports.endOfDay()', function() {
-	// 	it('should return empty string when the value is not present', function() {
-	// 		assert.equal(Occasion.endOfDay(), '');
-	// 	});
-	// 	it('should return 1968-01-01 23:59:59 when the value is 1968-01-01 00:00:00', function() {
-	// 		assert.equal(Occasion.endOfDay('1968-01-01 00:00:00'), '1968-01-01 23:59:59');
-	// 	});
-	// 	it('should return 1968-01-02 05:59:59 when the value is 1968-01-01 00:00:00, US/Central, UTC', function() {
-	// 		assert.equal(Occasion.endOfDay('1968-01-01 00:00:00', 'US/Central', 'UTC'), '1968-01-02 05:59:59');
-	// 	});
-	// });
-
 	describe('exports.interval()', function() {
 		it('should return 0 DAY interval when the value is not present', function() {
 			assert.equal(Occasion.interval().sign, '+');
@@ -94,17 +70,17 @@ describe('Tests', function() {
 		});
 
 		it('closes of 2017-04-01 04:59:59 UTC', function() {
-			closed = Occasion.auditClosed(opened, interval_open, tz);
+			closed = Occasion._auditClosed(opened, interval_open, tz);
 			assert.equal(closed, '2017-04-01 04:59:59');
 		});
 
 		it('period_max of 2017-04-01 04:59:59 UTC', function() {
-			period_max = Occasion.auditPeriodMax(closed);
+			period_max = Occasion._auditPeriodMax(closed);
 			assert.equal(period_max, '2017-04-01 04:59:59');
 		});
 
 		it('period_min of 2017-03-01 06:00:00 UTC', function() {
-			period_min = Occasion.auditPeriodMin(period_max, interval_licet, tz);
+			period_min = Occasion._auditPeriodMin(period_max, interval_licet, tz);
 			assert.equal(period_min, '2017-03-01 06:00:00');
 		});
 
@@ -113,12 +89,12 @@ describe('Tests', function() {
 		});
 
 		it('carryover_max of 2017-03-01 05:59:59 UTC (one second before period_max)', function() {
-			carryover_max = Occasion.auditCarroverMax(period_min);
+			carryover_max = Occasion._auditCarroverMax(period_min);
 			assert.equal(carryover_max, '2017-03-01 05:59:59');
 		});
 
 		it('carryover_min of 2017-02-01 06:00:00 UTC', function() {
-			carryover_min = Occasion.auditCarroverMin(carryover_max, interval_carry, tz);
+			carryover_min = Occasion._auditCarroverMin(carryover_max, interval_carry, tz);
 			assert.equal(carryover_min, '2017-02-01 06:00:00');
 		});
 	});
