@@ -4,15 +4,15 @@ var assert = require('assert');
 var Occasion = require('..');
 
 describe('Tests', function() {
-	describe('exports.mdy2iso()', function() {
+	describe('exports.toIsoString()', function() {
 		it('should return empty string when the value is not present', function() {
-			assert.equal(Occasion.mdy2iso(), '');
+			assert.equal(Occasion.toIsoString(), '');
 		});
 		it('should return 1968-01-01 when the value is 1/1/1968', function() {
-			assert.equal(Occasion.mdy2iso('1/1/1968'), '1968-01-01');
+			assert.equal(Occasion.toIsoString('1/1/1968'), '1968-01-01');
 		});
 		it('should return 1968-01-01 when the value is new Date(1/1/1968)', function() {
-			assert.equal(Occasion.mdy2iso(new Date('1/1/1968')), '1968-01-01');
+			assert.equal(Occasion.toIsoString(new Date('1/1/1968')), '1968-01-01');
 		});
 	});
 
