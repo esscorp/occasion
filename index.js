@@ -298,3 +298,38 @@ exports.auditCarroverMin = function(carryover_max, interval, tz) {
 
 	return  ts;
 };
+
+/**
+ * Calculate audit timestamp recipe.
+ * @param {String} audit opened date string in iso format.
+ * @param {Object} audit intervals (from audits_types) object.
+ * @param {String} client's timezone name.
+ * @return {Object} recipe of timestamps in UTC.
+ *
+ */
+exports.auditRecipe = function(opened, intervals, tz) {
+
+	Prove('SOS', arguments);
+
+	var interval_open = intervals.interval_open;
+	var interval_licet = intervals.interval_licet;
+	var interval_carry = intervals.interval_carry;
+	var closed, period_max, period_min, carryover_max, carryover_min;
+
+	opened = exports.toIsoString(opened);
+	opened = exports.auditOpened(opened, tz);
+	closed = exports.auditClosed(opened, interval_open, tz);
+	period_max = exports.auditPeriodMax(closed);
+	period_min = exports.auditPeriodMin(period_max, interval_licet, tz);
+	if (interval_carry) carryover_max = exports.auditCarroverMax(period_min);
+	if (interval_carry) carryover_min = exports.auditCarroverMin(carryover_max, interval_carry, tz);
+
+	return {
+		opened: opened,
+		closed: closed,
+		period_min: period_min,
+		period_max: period_max,
+		carryover_min: carryover_min,
+		carryover_max: carryover_max
+	};
+};

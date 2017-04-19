@@ -70,42 +70,10 @@ describe('Tests', function() {
 		});
 	});
 
-	// describe('exports.auditOpened()', function() {
-	// 	it('should return 2000-01-01 06:00:00 when the value is `2000-01-01`', function() {
-	// 		assert.equal(Occasion.auditOpened('2000-01-01', tz), '2000-01-01 06:00:00');
-	// 	});
-	// 	it('should return 1991-12-30 06:00:00 when the value is `1999-12-30`', function() {
-	// 		assert.equal(Occasion.auditOpened('1991-12-30', tz), '1991-12-30 06:00:00');
-	// 	});
-	// });
-
-	// describe('exports.auditClosed()', function() {
-	// 	it('should return 2000-12-31 05:59:59 when the value is `2000-01-01 06:00:00`, `1 YEAR`', function() {
-	// 		assert.equal(Occasion.auditClosed('2000-01-01 06:00:00', '3 MONTH', tz), '2000-03-31 05:59:59');
-	// 	});
-	// });
-
-	// describe('exports.auditPeriodMax()', function() {
-	// 	it('should return 2000-03-31 05:59:59 when the value is `2000-03-31 05:59:59`', function() {
-	// 		assert.equal(Occasion.auditPeriodMax('2000-03-31 05:59:59'), '2000-03-31 05:59:59');
-	// 	});
-	// });
-
-	// describe('exports.auditPeriodMin()', function() {
-	// 	it('should return 1999-04-01 06:00:00 when the value is `2000-03-31 05:59:59`', function() {
-	// 		assert.equal(Occasion.auditPeriodMin('2000-03-31 05:59:59', '1 YEAR', tz), '1999-04-01 06:00:00');
-	// 	});
-	// });
-
-
 	/*
 	The following tests use some simple intervals to make the calculations easier to reason about.
 	Specifically, we set the open interval and licet interval to one month each. This means the
-	audit period and audit open period overlap. Therefore, we should expect the following:
-
-	1. opened is the start of the month,
-	2. closed is the end of the month,
-	3. opened = period_min
+	audit period and audit open period overlap.
 	*/
 	describe('Audit Recipe: 1 MONTH, Opened 3/1/2017', function() {
 
@@ -113,7 +81,7 @@ describe('Tests', function() {
 		var opened = '3/1/2017';
 		var interval_open = '1 MONTHS';
 		var interval_licet = '1 MONTHS';
-		var interval_carryover = '1 MONTHS';
+		var interval_carry = '1 MONTHS';
 		var closed, period_max, period_min, carryover_max, carryover_min;
 
 		it('expect opened converted to `2017-03-01`', function() {
@@ -141,7 +109,6 @@ describe('Tests', function() {
 		});
 
 		it('period_min equals opened', function() {
-			period_min = Occasion.auditPeriodMin(closed, interval_licet, tz);
 			assert.equal(period_min, opened);
 		});
 
@@ -151,10 +118,49 @@ describe('Tests', function() {
 		});
 
 		it('carryover_min of 2017-02-01 06:00:00 UTC', function() {
-			carryover_min = Occasion.auditCarroverMin(carryover_max, interval_carryover, tz);
+			carryover_min = Occasion.auditCarroverMin(carryover_max, interval_carry, tz);
 			assert.equal(carryover_min, '2017-02-01 06:00:00');
 		});
-
 	});
 
+	describe('Occasion.auditRecipe(`3/1/2017`)', function() {
+
+		var tz = 'US/Central';
+		var opened = '3/1/2017';
+		var intervals = {
+			interval_open: '1 MONTHS',
+			interval_licet: '1 MONTHS',
+			interval_carry: '1 MONTHS'
+		};
+
+		var recipe = Occasion.auditRecipe(opened, intervals, tz);
+
+		it('expect opened of 2017-03-01 06:00:00 UTC', function() {
+			assert.equal(recipe.opened, '2017-03-01 06:00:00');
+		});
+
+		it('closes of 2017-04-01 04:59:59 UTC', function() {
+			assert.equal(recipe.closed, '2017-04-01 04:59:59');
+		});
+
+		it('period_max of 2017-04-01 04:59:59 UTC', function() {
+			assert.equal(recipe.period_max, '2017-04-01 04:59:59');
+		});
+
+		it('period_min of 2017-03-01 06:00:00 UTC', function() {
+			assert.equal(recipe.period_min, '2017-03-01 06:00:00');
+		});
+
+		it('period_min equals opened', function() {
+			assert.equal(recipe.period_min, recipe.opened);
+		});
+
+		it('carryover_max of 2017-03-01 05:59:59 UTC (one second before period_max)', function() {
+			assert.equal(recipe.carryover_max, '2017-03-01 05:59:59');
+		});
+
+		it('carryover_min of 2017-02-01 06:00:00 UTC', function() {
+			assert.equal(recipe.carryover_min, '2017-02-01 06:00:00');
+		});
+	});
 });
