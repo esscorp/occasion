@@ -5,7 +5,7 @@ var Prove = require('provejs-params');
 var format = 'YYYY-MM-DD HH:mm:ss';
 
 // convert an english date to iso date string
-exports.toIsoString = function(dateStr) {
+exports.toISOString = function(dateStr) {
 	if (!dateStr) return '';
 
 	var date = new Date(dateStr);
@@ -286,7 +286,7 @@ exports.auditRecipe = function(opened, intervals, tz) {
 	var interval_carry = intervals.carryover;
 	var closed, period_max, period_min, carryover_max, carryover_min;
 
-	opened = exports.toIsoString(opened);
+	opened = exports.toISOString(opened);
 	opened = exports.auditOpened(opened, tz);
 	closed = exports._auditClosed(opened, interval_open, tz);
 	period_max = exports._auditPeriodMax(closed);

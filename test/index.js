@@ -7,15 +7,15 @@ var tz = 'US/Central';
 var range = 7;
 
 describe('Tests', function() {
-	describe('exports.toIsoString()', function() {
+	describe('exports.toISOString()', function() {
 		it('should return empty string when the value is not present', function() {
-			assert.equal(Occasion.toIsoString(), '');
+			assert.equal(Occasion.toISOString(), '');
 		});
 		it('should return 1968-01-01 when the value is 1/1/1968', function() {
-			assert.equal(Occasion.toIsoString('1/1/1968'), '1968-01-01');
+			assert.equal(Occasion.toISOString('1/1/1968'), '1968-01-01');
 		});
 		it('should return 1968-01-01 when the value is new Date(1/1/1968)', function() {
-			assert.equal(Occasion.toIsoString(new Date('1/1/1968')), '1968-01-01');
+			assert.equal(Occasion.toISOString(new Date('1/1/1968')), '1968-01-01');
 		});
 	});
 
@@ -61,7 +61,7 @@ describe('Tests', function() {
 		var closed, period_max, period_min, carryover_max, carryover_min;
 
 		it('expect opened converted to `2017-03-01`', function() {
-			opened = Occasion.toIsoString(opened);
+			opened = Occasion.toISOString(opened);
 			assert.equal(opened, '2017-03-01');
 		});
 		it('expect opened of 2017-03-01 06:00:00 UTC', function() {
