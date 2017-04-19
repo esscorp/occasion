@@ -40,15 +40,6 @@ describe('Tests', function() {
 		});
 	});
 
-	describe('exports.startOfMonthClamped()', function() {
-		it('should return 2000-01-01 00:00:00 when the value is new Date(2000-01-02)', function() {
-			assert.equal(Occasion.startOfMonthClamped(new Date('2000-01-02')), '2000-01-01 00:00:00');
-		});
-		it('should return 2000-01-01 00:00:00 when the value is new Date(1999-12-30)', function() {
-			assert.equal(Occasion.startOfMonthClamped(new Date('1999-12-30')), '2000-01-01 00:00:00');
-		});
-	});
-
 	describe('exports.interval()', function() {
 		it('should return 0 DAY interval when the value is not present', function() {
 			assert.equal(Occasion.interval().sign, '+');
@@ -67,27 +58,39 @@ describe('Tests', function() {
 		});
 	});
 
-	describe('exports.addInterval()', function() {
-		it('should return same value when the 2nd param is not present', function() {
-			assert.equal(Occasion.addInterval('2000-01-01 00:00:00'), '2000-01-01 00:00:00');
+	describe('exports.auditOpenedClamped()', function() {
+		var days = 7;
+		var tz = 'US/Central';
+
+		it('should return 2000-01-01 06:00:00 when the value is new Date(2000-01-02)', function() {
+			assert.equal(Occasion.auditOpenedClamped(new Date('2000-01-02'), days, tz), '2000-01-01 06:00:00');
 		});
-		it('should return 1 YEAR later when the 2nd param is 1 YEAR', function() {
-			assert.equal(Occasion.addInterval('2000-01-01 00:00:00', '1 YEAR'), '2001-01-01 00:00:00');
-		});
-		it('should return 1 YEAR before when the 2nd param is - 1 YEAR', function() {
-			assert.equal(Occasion.addInterval('2000-01-01 00:00:00', '- 1 YEAR'), '1999-01-01 00:00:00');
+		it('should return 2000-01-01 06:00:00 when the value is new Date(1999-12-30)', function() {
+			assert.equal(Occasion.auditOpenedClamped(new Date('1999-12-30'), days, tz), '2000-01-01 06:00:00');
 		});
 	});
 
-	describe('exports.subInterval()', function() {
-		it('should return same value when the 2nd param is not present', function() {
-			assert.equal(Occasion.subInterval('2000-01-01 00:00:00'), '2000-01-01 00:00:00');
-		});
-		it('should return 1 YEAR before when the 2nd param is 1 YEAR', function() {
-			assert.equal(Occasion.subInterval('2000-01-01 00:00:00', '1 YEAR'), '1999-01-01 00:00:00');
-		});
-		it('should return 1 YEAR later when the 2nd param is - 1 YEAR', function() {
-			assert.equal(Occasion.subInterval('2000-01-01 00:00:00', '- 1 YEAR'), '2001-01-01 00:00:00');
-		});
+	describe('exports.auditOpened()', function() {
+
+	});
+
+	describe('exports.auditClosed()', function() {
+
+	});
+
+	describe('exports.auditPeriodMax()', function() {
+
+	});
+
+	describe('exports.auditPeriodMin()', function() {
+
+	});
+
+	describe('exports.auditCarroverMax()', function() {
+
+	});
+
+	describe('exports.auditCarroverMin()', function() {
+
 	});
 });

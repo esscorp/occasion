@@ -54,44 +54,6 @@ exports.endOfDay = function(dateStr, tzIn, tzOut) {
 	return moment;
 };
 
-
-exports.startOfMonthClamped = function(dateStr, range, tzIn, tzOut) {
-
-	// validate & set defaults
-	if (!dateStr) return '';
-	if (typeof range !== 'number') range = 7;
-	if (typeof tzIn !== 'string') tzIn = 'UTC';
-	if (typeof tzOut !== 'string') tzOut = 'UTC';
-
-	var now = Moment.tz(dateStr, tzIn);
-	var day = now.date();
-	var lower = 1 + range;
-	var upper = 31 - range;
-	var fmt = format;
-
-	if (day <= lower) {
-		// late
-		return now
-		.startOf('month')
-		.startOf('day')
-		.tz(tzOut)
-		.format(fmt);
-	} else if (day >= upper) {
-		// early
-		return now
-		.add(1, 'month')
-		.startOf('month')
-		.startOf('day')
-		.tz(tzOut)
-		.format(fmt);
-	} else {
-		// not early or late so assume
-		return now
-		.tz(tzOut)
-		.format(fmt);
-	}
-};
-
 // split interval into expr and unit
 exports.interval = function(str) {
 
@@ -123,46 +85,6 @@ exports.interval = function(str) {
 	return interval;
 };
 
-exports.addInterval = function(dateStr, intervalStr) {
-
-	// validate & set defaults
-	if (!intervalStr) intervalStr = '0 DAY';
-
-	var moment = Moment.tz(dateStr, 'UTC');
-	var interval = exports.interval(intervalStr);
-	var fmt = format;
-
-	if (interval.sign === '+') {
-		return moment
-		.add(interval.expr, interval.unit)
-		.format(fmt);
-	} else {
-		return moment
-		.subtract(interval.expr, interval.unit)
-		.format(fmt);
-	}
-};
-
-exports.subInterval = function(dateStr, intervalStr) {
-
-	// validate & set defaults
-	if (!intervalStr) intervalStr = '0 DAY';
-
-	var moment = Moment.tz(dateStr, 'UTC');
-	var interval = exports.interval(intervalStr);
-	var fmt = format;
-
-	if (interval.sign === '+') {
-		return moment
-		.subtract(interval.expr, interval.unit)
-		.format(fmt);
-	} else {
-		return moment
-		.add(interval.expr, interval.unit)
-		.format(fmt);
-	}
-};
-
 exports.convert = function(date, tzFrom, tzTo, fmt) {
 
 	Prove('*SSs', arguments);
@@ -174,6 +96,49 @@ exports.convert = function(date, tzFrom, tzTo, fmt) {
 	fmt = fmt || format;
 
 	return Moment.tz(date, tzFrom).tz(tzTo).format(fmt);
+};
+
+/**
+ * Calculate audit opened timestamp.
+ * @param {String} or {Date}  timestamp string in iso format in client's timezone.
+ * @param {Number} positive integer range around the beginning of month to clamp to.
+ * @param {String} client's timezone name.
+ * @return {String} timestamp in UTC indicating when audit should be opened.
+ *
+ */
+exports.auditOpenedClamped = function(date, range, tz) {
+
+	Prove('*NS', arguments);
+
+	var now = Moment.tz(date, tz);
+	var day = now.date();
+	var lower = 1 + range;
+	var upper = 31 - range;
+
+	if (day <= lower) {
+		// late
+		return Moment
+		.tz(date, tz) // convert to client's timezone
+		.startOf('month')
+		.startOf('day')
+		.tz('UTC')
+		.format(format);
+	} else if (day >= upper) {
+		// early
+		return Moment
+		.tz(date, tz) // convert to client's timezone
+		.add(1, 'month')
+		.startOf('month')
+		.startOf('day')
+		.tz('UTC')
+		.format(format);
+	} else {
+		// not early or late so assume client wants explicit date
+		return Moment
+		.tz(date, tz) // convert to client's timezone
+		.tz('UTC')
+		.format(format);
+	}
 };
 
 /**
