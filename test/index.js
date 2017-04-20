@@ -58,7 +58,7 @@ describe('Tests', function() {
 		var interval_open = '1 MONTHS';
 		var interval_licet = '1 MONTHS';
 		var interval_carry = '1 MONTHS';
-		var closed, period_max, period_min, carryover_max, carryover_min;
+		var expired, period_max, period_min, carryover_max, carryover_min;
 
 		it('expect opened converted to `2017-03-01`', function() {
 			opened = Occasion.toISOString(opened);
@@ -70,12 +70,12 @@ describe('Tests', function() {
 		});
 
 		it('closes of 2017-04-01 04:59:59 UTC', function() {
-			closed = Occasion._auditClosed(opened, interval_open, tz);
-			assert.equal(closed, '2017-04-01 04:59:59');
+			expired = Occasion._auditExpired(opened, interval_open, tz);
+			assert.equal(expired, '2017-04-01 04:59:59');
 		});
 
 		it('period_max of 2017-04-01 04:59:59 UTC', function() {
-			period_max = Occasion._auditPeriodMax(closed);
+			period_max = Occasion._auditPeriodMax(expired);
 			assert.equal(period_max, '2017-04-01 04:59:59');
 		});
 
@@ -116,7 +116,7 @@ describe('Tests', function() {
 		});
 
 		it('closes of 2017-04-01 04:59:59 UTC', function() {
-			assert.equal(recipe.closed, '2017-04-01 04:59:59');
+			assert.equal(recipe.expired, '2017-04-01 04:59:59');
 		});
 
 		it('period_max of 2017-04-01 04:59:59 UTC', function() {

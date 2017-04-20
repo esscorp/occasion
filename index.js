@@ -142,16 +142,19 @@ exports.auditOpened = function(opened, tz) {
 };
 
 /**
- * Calculate audit closed timestamp.
+ * Calculate audit expired timestamp.
  * @param {String} audit opened timestamp string in iso format in UTC timezone.
  * @param {String} positive opened interval string from audit type recipe.
  * @param {String} client's timezone name.
- * @return {String} timestamp in UTC indicating when audit should be closed.
+ * @return {String} timestamp in UTC indicating when audit should be expired.
  *
- * Audits are closed at the end of the business day in the client's timezone.
- * However, we store the closed timestamp in the database in UTC.
+ * Audits are expired at the end of the business day in the client's timezone.
+ * However, we store the expired timestamp in the database in UTC.
+ *
+ * Note the audit expires date is different than the actual date an audit closes.
+ * We store both values in the database. Don't confuse the two.
  */
-exports._auditClosed = function(opened, interval, tz) {
+exports._auditExpired = function(opened, interval, tz) {
 
 	Prove('SSS', arguments);
 
@@ -162,7 +165,7 @@ exports._auditClosed = function(opened, interval, tz) {
 		.tz(tz) // convert to client's timezone
 		.add(inval.expr, inval.unit) // calculate close date
 		.subtract(1, 'day') // subtract one day because we are adding one day when call endOf('day')
-		.endOf('day') // audits closed at end of day in client's timezone
+		.endOf('day') // audits expired at end of day in client's timezone
 		.tz('UTC') // convert back to UTC
 		.format(format);
 
@@ -171,18 +174,18 @@ exports._auditClosed = function(opened, interval, tz) {
 
 /**
  * Calculate audit period max timestamp.
- * @param {String} audit closed timestamp string in iso format in UTC timezone.
+ * @param {String} audit expired timestamp string in iso format in UTC timezone.
  * @return {String} timestamp in UTC indicating when audit period max should be.
  *
  * Audits have a period max value which indicates when max time certificates date
  * are allowed. Currently, audit period max is simply the same as the audit closes timestamp.
  */
-exports._auditPeriodMax = function(closed) {
+exports._auditPeriodMax = function(expired) {
 
 	Prove('S', arguments);
 
 	var ts = Moment
-		.tz(closed, 'UTC')
+		.tz(expired, 'UTC')
 		.format(format);
 
 	return  ts;
@@ -284,19 +287,19 @@ exports.auditRecipe = function(opened, intervals, tz) {
 	var interval_open = intervals.open;
 	var interval_licet = intervals.licet;
 	var interval_carry = intervals.carryover;
-	var closed, period_max, period_min, carryover_max, carryover_min;
+	var expired, period_max, period_min, carryover_max, carryover_min;
 
 	opened = exports.toISOString(opened);
 	opened = exports.auditOpened(opened, tz);
-	closed = exports._auditClosed(opened, interval_open, tz);
-	period_max = exports._auditPeriodMax(closed);
+	expired = exports._auditExpired(opened, interval_open, tz);
+	period_max = exports._auditPeriodMax(expired);
 	period_min = exports._auditPeriodMin(period_max, interval_licet, tz);
 	if (interval_carry) carryover_max = exports._auditCarroverMax(period_min);
 	if (interval_carry) carryover_min = exports._auditCarroverMin(carryover_max, interval_carry, tz);
 
 	return {
 		opened: opened,
-		closed: closed,
+		expired: expired,
 		period_min: period_min,
 		period_max: period_max,
 		carryover_min: carryover_min,
