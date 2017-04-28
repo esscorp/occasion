@@ -103,13 +103,11 @@ describe('Tests', function() {
 
 		var tz = 'US/Central';
 		var opened = '3/1/2017';
-		var intervals = {
-			open: '1 MONTHS',
-			licet: '1 MONTHS',
-			carryover: '1 MONTHS'
-		};
+		var interval_open = '1 MONTHS';
+		var interval_licet = '1 MONTHS';
+		var interval_carry = '1 MONTHS';
 
-		var recipe = Occasion.auditRecipe(opened, intervals, tz);
+		var recipe = Occasion.auditRecipe(opened, interval_open, interval_licet, interval_carry, tz);
 
 		it('expect opened of 2017-03-01 06:00:00 UTC', function() {
 			assert.equal(recipe.opened, '2017-03-01 06:00:00');
