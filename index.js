@@ -5,6 +5,12 @@ var Moment = require('moment-timezone');
 var Prove = require('provejs-params');
 var format = 'YYYY-MM-DD HH:mm:ss';
 
+// reformats seconds into HH:mm:ss
+exports.duration = function(secs) {
+	secs = secs || 0;
+	return Moment.utc(secs*1000).format('HH:mm:ss');
+};
+
 // checks if string is a valid date
 exports.isDate = function(dateStr) {
 
