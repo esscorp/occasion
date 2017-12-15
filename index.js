@@ -1,8 +1,27 @@
 'use strict';
 
+var _ = require('underscore');
 var Moment = require('moment-timezone');
 var Prove = require('provejs-params');
 var format = 'YYYY-MM-DD HH:mm:ss';
+
+// checks if string is a valid date
+exports.isDate = function(dateStr) {
+
+	if (_.isDate(dateStr)) return true;
+
+	if (!dateStr) return false;
+	if (_.isFinite(dateStr)) return false;
+
+	var isValid = Moment(new Date(dateStr)).isValid();
+	if (!isValid) return false;
+
+	// because `Moment` thinks 'A lurking danger CE 476' is a valid date
+	var startsWithNumber = /^(\d)+/.test(dateStr);
+	if (!startsWithNumber) return false;
+
+	return true;
+};
 
 // convert an english date to iso date string
 exports.toISOString = function(dateStr) {

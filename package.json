@@ -18,7 +18,8 @@
   "homepage": "https://github.com/esscorp/timestamps#readme",
   "dependencies": {
     "moment-timezone": "^0.5.13",
-    "provejs-params": "^1.0.1"
+    "provejs-params": "^1.0.1",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "@esscorp/eslint": "^2.2.0",
