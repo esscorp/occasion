@@ -5,6 +5,13 @@ var Moment = require('moment-timezone');
 var Prove = require('provejs-params');
 var format = 'YYYY-MM-DD HH:mm:ss';
 
+// exposes moments diff function
+exports.diff = function(fromDate, toDate, metric) {
+	var to = Moment(toDate);
+	var from = Moment(fromDate);
+	return to.diff(from, metric);
+};
+
 // exposes moments subtract function
 exports.subtract = function(date, units, metric, fmt) {
 
@@ -45,6 +52,7 @@ exports.startOf = function(date, metric, fmt) {
 };
 
 // gives timezone abbreviation
+// timezoneName should always be defined
 exports.zoneAbbr = function(timezoneName) {
 	return Moment().tz(timezoneName).zoneAbbr();
 };
