@@ -5,6 +5,50 @@ var Moment = require('moment-timezone');
 var Prove = require('provejs-params');
 var format = 'YYYY-MM-DD HH:mm:ss';
 
+// exposes moments subtract function
+exports.subtract = function(date, units, metric, fmt) {
+
+	// return early
+	if (!date) return date;
+
+	// set defaults
+	fmt = fmt || format;
+
+	var moment = Moment.tz(date, 'UTC');
+	return moment.subtract(units, metric).format(fmt);
+};
+
+// exposes moments endof function
+exports.endOf = function(date, metric, fmt) {
+
+	// return early
+	if (!date) return date;
+
+	// set defaults
+	fmt = fmt || format;
+
+	var moment = Moment.tz(date, 'UTC');
+	return moment.endOf(metric).format(fmt);
+};
+
+// exposes moments startof function
+exports.startOf = function(date, metric, fmt) {
+
+	// return early
+	if (!date) return date;
+
+	// set defaults
+	fmt = fmt || format;
+
+	var moment = Moment.tz(date, 'UTC');
+	return moment.startOf(metric).format(fmt);
+};
+
+// gives timezone abbreviation
+exports.zoneAbbr = function(timezoneName) {
+	return Moment().tz(timezoneName).zoneAbbr();
+};
+
 // reformats seconds into HH:mm:ss
 exports.duration = function(secs) {
 	secs = secs || 0;
