@@ -137,4 +137,67 @@ describe('Tests', function() {
 			assert.equal(recipe.carryover_min, '2017-02-01 06:00:00');
 		});
 	});
+
+	describe('Occasion.lessThan', function() {
+
+		var smallValue = '2017-03';
+		var largeValue = '2017-04';
+
+		it('true for less than', function() {
+			assert.equal(true, Occasion.lessThan(smallValue, largeValue));
+		});
+
+		it('false for less than', function() {
+			assert.equal(false, Occasion.lessThan(largeValue, smallValue));
+		});
+
+		it('false for equal', function() {
+			assert.equal(false, Occasion.lessThan(largeValue, largeValue));
+		});
+	});
+
+	describe('Occasion.diff', function() {
+
+		var smallValue = '2017-03-10';
+		var largeValue = '2017-03-20';
+
+		it('ten days difference', function() {
+			assert.equal(10, Occasion.diff(smallValue, largeValue, 'days'));
+		});
+	});
+
+	describe('Occasion.add', function() {
+
+		it('ten days added to 2017-03-01', function() {
+			assert.equal('2017-03-11', Occasion.add('2017-03-01', 10, 'days', 'YYYY-MM-DD'));
+		});
+	});
+
+	describe('Occasion.subtract', function() {
+
+		it('ten days difference', function() {
+			assert.equal('2017-03-01', Occasion.subtract('2017-03-11', 10, 'days', 'YYYY-MM-DD'));
+		});
+	});
+
+	describe('Occasion.endOf', function() {
+
+		it('last day of month for 2017-12', function() {
+			assert.equal('2017-12-31', Occasion.endOf('2017-12-01', 'month', 'YYYY-MM-DD'));
+		});
+	});
+
+	describe('Occasion.startOf', function() {
+
+		it('first day of month for 2017-12', function() {
+			assert.equal('2017-12-01', Occasion.startOf('2017-12-10', 'month', 'YYYY-MM-DD'));
+		});
+	});
+
+	describe('Occasion.zoneAbbr', function() {
+
+		it('test for America/Chicago', function() {
+			assert.equal('CST', Occasion.zoneAbbr('America/Chicago'));
+		});
+	});
 });
