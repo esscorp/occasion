@@ -12,6 +12,27 @@ exports.diff = function(fromDate, toDate, metric) {
 	return to.diff(from, metric);
 };
 
+// performs comparison dateLeft < dateRight
+exports.lessThan = function(dateLeft, dateRight) {
+	var left = Moment(dateLeft);
+	var right = Moment(dateRight);
+
+	return left < right;
+};
+
+// exposes moments add function
+exports.add = function(date, units, metric, fmt) {
+
+	// return early
+	if (!date) return date;
+
+	// set defaults
+	fmt = fmt || format;
+
+	var moment = Moment.tz(date, 'UTC');
+	return moment.add(units, metric).format(fmt);
+};
+
 // exposes moments subtract function
 exports.subtract = function(date, units, metric, fmt) {
 
