@@ -4,6 +4,89 @@ var _ = require('underscore');
 var Moment = require('moment-timezone');
 var Prove = require('provejs-params');
 var format = 'YYYY-MM-DD HH:mm:ss';
+var tzDefaultConfig = {
+	name: 'US/Central',
+	abbr: 'CST',
+	format: 'YYYY-MM-DD HH:mm:ss'
+};
+
+
+/*
+	Pulled from admin helpers
+*/
+function isOptions(obj) {
+	if (!_.isObject(obj)) return false;
+	if (!_.has(obj, 'data')) return false;
+	if (!_.has(obj, 'name')) return false;
+	return true;
+}
+
+exports.convertTimezone = function(date, tzFrom, tzTo, fmt) {
+
+	// return early
+	if (!date) return date;
+
+	// set defaults
+	if (_.isObject(tzFrom) && tzFrom.name) tzFrom = tzFrom.name;
+	if (!_.isString(tzFrom)) tzFrom = 'UTC';
+
+	if (_.isObject(tzTo) && tzTo.name) tzTo = tzTo.name;
+	if (!_.isString(tzTo)) tzTo = 'US/Central';
+
+	if (!_.isString(fmt)) fmt = 'YYYY-MM-DD HH:mm:ss';
+
+	return exports.convert(date, tzFrom, tzTo, fmt);
+};
+
+exports.formatTimestamp = function(str) {
+	return exports.convertTimezone(str, 'UTC', 'UTC');
+};
+
+exports.now = function(fmt) {
+	return exports.convert(new Date(), 'UTC', 'UTC', fmt);
+};
+
+exports.parseDaterange = function(daterange, index) {
+
+	if (!daterange || !_.isString(daterange)) return undefined;
+
+	var dates = daterange.split(' to ');
+	var date = dates[index];
+	var timestamp = (index === 0) ? date + ' 00:00:00' : date + ' 23:59:59';
+
+	return timestamp;
+};
+
+exports.datetime = function(datetime, format) {
+	if (!datetime) return '';
+	format = (_.isString(format))? format : 'YYYY-MM-DD HH:mm:ss';
+	var text = exports.convert(datetime, 'UTC', 'UTC', format);
+	return text;
+};
+
+exports.timestamp = function(utcTime, tzUserConfig) {
+	var cfg = (isOptions(tzUserConfig))? tzDefaultConfig : tzUserConfig;
+	var fmt = cfg.format;
+	var text = exports.convert(utcTime, 'UTC', cfg.name, fmt);
+
+	return text;
+};
+
+exports.timestampz = function(utcTime, tzUserConfig) {
+
+	//Note: you must clone the object here
+	var tz = (tzUserConfig && !isOptions(tzUserConfig))
+		? _.clone(tzUserConfig)
+		: _.clone(tzDefaultConfig);
+
+	//only add timezone if not already has timezone
+	tz.format = (_.last(tz.format) === 'z')? tz.format : tz.format + ' z';
+	return exports.timestamp(utcTime, tz);
+};
+
+/*
+	end of admin helpers
+*/
 
 // exposes moments diff function
 exports.diff = function(fromDate, toDate, metric) {
