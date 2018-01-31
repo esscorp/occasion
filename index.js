@@ -10,6 +10,15 @@ var tzDefaultConfig = {
 	format: 'YYYY-MM-DD HH:mm:ss'
 };
 
+/*
+	Pulled from users helpers
+*/
+exports.clockDrift = function() {
+	return Moment().format('x');
+};
+/*
+	end of users helpers
+*/
 
 /*
 	Pulled from admin helpers
