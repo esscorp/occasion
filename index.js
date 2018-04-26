@@ -215,7 +215,9 @@ exports.interval = function(str) {
 	if (!_.isString(str)) str = '0 DAY';
 
 	var parts = str.split(' ');
-	var sign, expr, unit, interval;
+	var sign;
+	var expr;
+	var unit;
 
 	if (parts.length < 2) {
 		return false;
@@ -241,7 +243,7 @@ exports.interval = function(str) {
 	if (unit === 'second') unit = 'seconds';
 	if (unit === 'millisecond') unit = 'milliseconds';
 
-	interval = {
+	var interval = {
 		sign: sign,
 		expr: expr,
 		unit: unit
