@@ -45,7 +45,7 @@ exports.convertTimezone = function(date, tzFrom, tzTo, format) {
 
 	if (!_.isString(format)) format = FORMAT;
 
-	return exports.convert(date, tzFrom, tzTo, format);
+	return exports._convert(date, tzFrom, tzTo, format);
 };
 
 exports.formatTimestamp = function(date) {
@@ -53,7 +53,7 @@ exports.formatTimestamp = function(date) {
 };
 
 exports.now = function(format) {
-	return exports.convert(new Date(), 'UTC', 'UTC', format);
+	return exports._convert(new Date(), 'UTC', 'UTC', format);
 };
 
 exports.parseDaterange = function(daterange, index) {
@@ -73,7 +73,7 @@ exports.datetime = function(date, format) {
 
 	if (!_.isString(format)) format = FORMAT;
 
-	var text = exports.convert(date, 'UTC', 'UTC', format);
+	var text = exports._convert(date, 'UTC', 'UTC', format);
 
 	return text;
 };
@@ -81,7 +81,7 @@ exports.datetime = function(date, format) {
 exports.timestamp = function(date, tzUserConfig) {
 	var cfg = (isOptions(tzUserConfig)) ? TZ_DEFAULT_CONFIG : tzUserConfig;
 	var format = cfg.format;
-	var text = exports.convert(date, 'UTC', cfg.name, format);
+	var text = exports._convert(date, 'UTC', cfg.name, format);
 
 	return text;
 };
@@ -256,7 +256,7 @@ exports.interval = function(str) {
 	return interval;
 };
 
-exports.convert = function(date, tzFrom, tzTo, format) {
+exports._convert = function(date, tzFrom, tzTo, format) {
 
 	Prove('*SSs', arguments);
 
