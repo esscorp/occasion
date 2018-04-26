@@ -31,7 +31,7 @@ function isOptions(obj) {
 	return true;
 }
 
-exports.convertTimezone = function(date, tzFrom, tzTo, fmt) {
+exports.convertTimezone = function(date, tzFrom, tzTo, format) {
 
 	// return early
 	if (!date) return date;
@@ -43,17 +43,17 @@ exports.convertTimezone = function(date, tzFrom, tzTo, fmt) {
 	if (_.isObject(tzTo) && tzTo.name) tzTo = tzTo.name;
 	if (!_.isString(tzTo)) tzTo = 'US/Central';
 
-	if (!_.isString(fmt)) fmt = FORMAT;
+	if (!_.isString(format)) format = FORMAT;
 
-	return exports.convert(date, tzFrom, tzTo, fmt);
+	return exports.convert(date, tzFrom, tzTo, format);
 };
 
 exports.formatTimestamp = function(str) {
 	return exports.convertTimezone(str, 'UTC', 'UTC');
 };
 
-exports.now = function(fmt) {
-	return exports.convert(new Date(), 'UTC', 'UTC', fmt);
+exports.now = function(format) {
+	return exports.convert(new Date(), 'UTC', 'UTC', format);
 };
 
 exports.parseDaterange = function(daterange, index) {
@@ -76,8 +76,8 @@ exports.datetime = function(datetime, format) {
 
 exports.timestamp = function(utcTime, tzUserConfig) {
 	var cfg = (isOptions(tzUserConfig))? TZ_DEFAULT_CONFIG : tzUserConfig;
-	var fmt = cfg.format;
-	var text = exports.convert(utcTime, 'UTC', cfg.name, fmt);
+	var format = cfg.format;
+	var text = exports.convert(utcTime, 'UTC', cfg.name, format);
 
 	return text;
 };
@@ -114,55 +114,55 @@ exports.lessThan = function(dateLeft, dateRight) {
 };
 
 // exposes moments add function
-exports.add = function(date, units, metric, fmt) {
+exports.add = function(date, units, metric, format) {
 
 	// return early
 	if (!date) return date;
 
 	// set defaults
-	fmt = fmt || FORMAT;
+	format = format || FORMAT;
 
 	var moment = Moment.tz(date, 'UTC');
-	return moment.add(units, metric).format(fmt);
+	return moment.add(units, metric).format(format);
 };
 
 // exposes moments subtract function
-exports.subtract = function(date, units, metric, fmt) {
+exports.subtract = function(date, units, metric, format) {
 
 	// return early
 	if (!date) return date;
 
 	// set defaults
-	fmt = fmt || FORMAT;
+	format = format || FORMAT;
 
 	var moment = Moment.tz(date, 'UTC');
-	return moment.subtract(units, metric).format(fmt);
+	return moment.subtract(units, metric).format(format);
 };
 
 // exposes moments endof function
-exports.endOf = function(date, metric, fmt) {
+exports.endOf = function(date, metric, format) {
 
 	// return early
 	if (!date) return date;
 
 	// set defaults
-	fmt = fmt || FORMAT;
+	format = format || FORMAT;
 
 	var moment = Moment.tz(date, 'UTC');
-	return moment.endOf(metric).format(fmt);
+	return moment.endOf(metric).format(format);
 };
 
 // exposes moments startof function
-exports.startOf = function(date, metric, fmt) {
+exports.startOf = function(date, metric, format) {
 
 	// return early
 	if (!date) return date;
 
 	// set defaults
-	fmt = fmt || FORMAT;
+	format = format || FORMAT;
 
 	var moment = Moment.tz(date, 'UTC');
-	return moment.startOf(metric).format(fmt);
+	return moment.startOf(metric).format(format);
 };
 
 // gives timezone abbreviation
@@ -256,7 +256,7 @@ exports.interval = function(str) {
 	return interval;
 };
 
-exports.convert = function(date, tzFrom, tzTo, fmt) {
+exports.convert = function(date, tzFrom, tzTo, format) {
 
 	Prove('*SSs', arguments);
 
@@ -264,9 +264,9 @@ exports.convert = function(date, tzFrom, tzTo, fmt) {
 	if (!date) return date;
 
 	// set defaults
-	fmt = fmt || FORMAT;
+	format = format || FORMAT;
 
-	return Moment.tz(date, tzFrom).tz(tzTo).format(fmt);
+	return Moment.tz(date, tzFrom).tz(tzTo).format(format);
 };
 
 /**
