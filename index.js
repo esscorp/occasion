@@ -103,18 +103,18 @@ exports.timestampz = function(date, tzUserConfig) {
 */
 
 // exposes moments diff function
-exports.diff = function(fromDate, toDate, metric) {
-	var to = Moment(toDate);
-	var from = Moment(fromDate);
-	return to.diff(from, metric);
+exports.diff = function(from, to, metric) {
+	var toMoment = Moment(to);
+	var fromMoment = Moment(from);
+	return toMoment.diff(fromMoment, metric);
 };
 
-// performs comparison dateLeft < dateRight
-exports.lessThan = function(dateLeft, dateRight) {
-	var left = Moment(dateLeft);
-	var right = Moment(dateRight);
+// performs comparison date1 < date2
+exports.lessThan = function(date1, date2) {
+	var moment1 = Moment(date1);
+	var moment2 = Moment(date2);
 
-	return left < right;
+	return moment1 < moment2;
 };
 
 // exposes moments add function
@@ -126,8 +126,7 @@ exports.add = function(date, units, metric, format) {
 	// set defaults
 	format = format || FORMAT;
 
-	var moment = Moment.tz(date, 'UTC');
-	return moment.add(units, metric).format(format);
+	return Moment.tz(date, 'UTC').add(units, metric).format(format);
 };
 
 // exposes moments subtract function
@@ -139,8 +138,7 @@ exports.subtract = function(date, units, metric, format) {
 	// set defaults
 	format = format || FORMAT;
 
-	var moment = Moment.tz(date, 'UTC');
-	return moment.subtract(units, metric).format(format);
+	return Moment.tz(date, 'UTC').subtract(units, metric).format(format);
 };
 
 // exposes moments endof function
@@ -152,8 +150,7 @@ exports.endOf = function(date, metric, format) {
 	// set defaults
 	format = format || FORMAT;
 
-	var moment = Moment.tz(date, 'UTC');
-	return moment.endOf(metric).format(format);
+	return Moment.tz(date, 'UTC').endOf(metric).format(format);
 };
 
 // exposes moments startof function
@@ -165,8 +162,7 @@ exports.startOf = function(date, metric, format) {
 	// set defaults
 	format = format || FORMAT;
 
-	var moment = Moment.tz(date, 'UTC');
-	return moment.startOf(metric).format(format);
+	return Moment.tz(date, 'UTC').startOf(metric).format(format);
 };
 
 // gives timezone abbreviation
