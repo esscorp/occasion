@@ -102,14 +102,12 @@ exports.timestampz = function(date, tzUserConfig) {
 	end of admin helpers
 */
 
-// exposes moments diff function
 exports.diff = function(from, to, metric) {
 	var toMoment = Moment(to);
 	var fromMoment = Moment(from);
 	return toMoment.diff(fromMoment, metric);
 };
 
-// performs comparison date1 < date2
 exports.lessThan = function(date1, date2) {
 	var moment1 = Moment(date1);
 	var moment2 = Moment(date2);
@@ -117,7 +115,6 @@ exports.lessThan = function(date1, date2) {
 	return moment1 < moment2;
 };
 
-// exposes moments add function
 exports.add = function(date, units, metric, format) {
 
 	// return early
@@ -126,10 +123,9 @@ exports.add = function(date, units, metric, format) {
 	// set defaults
 	format = format || FORMAT;
 
-	return Moment.tz(date, 'UTC').add(units, metric).format(format);
+	return Moment(date).add(units, metric).format(format);
 };
 
-// exposes moments subtract function
 exports.subtract = function(date, units, metric, format) {
 
 	// return early
@@ -138,10 +134,9 @@ exports.subtract = function(date, units, metric, format) {
 	// set defaults
 	format = format || FORMAT;
 
-	return Moment.tz(date, 'UTC').subtract(units, metric).format(format);
+	return Moment(date).subtract(units, metric).format(format);
 };
 
-// exposes moments endof function
 exports.endOf = function(date, metric, format) {
 
 	// return early
@@ -150,10 +145,9 @@ exports.endOf = function(date, metric, format) {
 	// set defaults
 	format = format || FORMAT;
 
-	return Moment.tz(date, 'UTC').endOf(metric).format(format);
+	return Moment(date).endOf(metric).format(format);
 };
 
-// exposes moments startof function
 exports.startOf = function(date, metric, format) {
 
 	// return early
@@ -162,7 +156,7 @@ exports.startOf = function(date, metric, format) {
 	// set defaults
 	format = format || FORMAT;
 
-	return Moment.tz(date, 'UTC').startOf(metric).format(format);
+	return Moment(date).startOf(metric).format(format);
 };
 
 // gives timezone abbreviation
