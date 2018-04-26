@@ -68,14 +68,18 @@ exports.parseDaterange = function(daterange, index) {
 };
 
 exports.datetime = function(datetime, format) {
+
 	if (!datetime) return '';
-	format = (_.isString(format)) ? format : FORMAT;
+
+	if (!_.isString(format)) format = FORMAT;
+
 	var text = exports.convert(datetime, 'UTC', 'UTC', format);
+
 	return text;
 };
 
 exports.timestamp = function(utcTime, tzUserConfig) {
-	var cfg = (isOptions(tzUserConfig))? TZ_DEFAULT_CONFIG : tzUserConfig;
+	var cfg = (isOptions(tzUserConfig)) ? TZ_DEFAULT_CONFIG : tzUserConfig;
 	var format = cfg.format;
 	var text = exports.convert(utcTime, 'UTC', cfg.name, format);
 
