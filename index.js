@@ -279,23 +279,21 @@ exports.auditOpenedClamped = function(date, range, tz) {
 
 	Prove('SNS', arguments);
 
-	var now = Moment.tz(date, tz);
-	var day = now.date();
+	var moment = Moment.tz(date, tz); // convert to client's timezone
+	var day = moment.date();
 	var lower = 1 + range;
 	var upper = 31 - range;
+	var late = (day <= lower);
+	var early = (day >= upper);
 
-	if (day <= lower) {
-		// late
-		return Moment
-			.tz(date, tz) // convert to client's timezone
+	if (late) {
+		return moment
 			.startOf('month')
 			.startOf('day')
 			.tz('UTC')
 			.format(FORMAT);
-	} else if (day >= upper) {
-		// early
-		return Moment
-			.tz(date, tz) // convert to client's timezone
+	} else if (early) {
+		return moment
 			.add(1, 'month')
 			.startOf('month')
 			.startOf('day')
@@ -303,8 +301,7 @@ exports.auditOpenedClamped = function(date, range, tz) {
 			.format(FORMAT);
 	} else {
 		// not early or late so assume client wants explicit date
-		return Moment
-			.tz(date, tz) // convert to client's timezone
+		return moment
 			.tz('UTC')
 			.format(FORMAT);
 	}
