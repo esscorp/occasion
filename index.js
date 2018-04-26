@@ -196,21 +196,15 @@ exports.isDate = function(dateStr) {
 };
 
 // convert an english date to iso date string
-exports.toISOString = function(dateStr) {
-	if (!dateStr) return '';
+exports.toISOString = function(date) {
 
-	var date = new Date(dateStr);
+	if (!date) return '';
 
-	//setup
-	var year = date.getFullYear();
-	var month = date.getMonth() + 1;
-	var day = date.getDate();
+	if (!_.isDate(date)) date = new Date(date);
 
-	if (month < 10) month = '0' + month;
-	if (day < 10) day = '0' + day;
+	var format = 'YYYY-MM-DD';
 
-	dateStr = year + '-' + month + '-' + day;
-	return dateStr;
+	return Moment(date).format(format);
 };
 
 // split interval into expr and unit
