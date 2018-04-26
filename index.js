@@ -212,7 +212,7 @@ exports.interval = function(str) {
 
 	// validate & set defaults
 	if (!str) str = '0 DAY';
-	if (typeof str !== 'string') str = '0 DAY';
+	if (!_.isString(str)) str = '0 DAY';
 
 	var parts = str.split(' ');
 	var sign, expr, unit, interval;
