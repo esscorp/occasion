@@ -199,6 +199,14 @@ exports.isDate = function(dateStr) {
 	return true;
 };
 
+exports.isTz = function(tz) {
+
+	Prove('*', arguments);
+
+	var zone = Moment.tz.zone(tz);
+	return (!!zone);
+};
+
 // convert an english date to iso date string
 exports.toISOString = function(date) {
 
