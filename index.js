@@ -1,8 +1,8 @@
 'use strict';
 
 var _ = require('underscore');
-var Moment = require('moment-timezone');
 var Prove = require('provejs-params');
+var Moment = require('moment-timezone');
 
 var FORMAT = 'YYYY-MM-DD HH:mm:ss';
 var TZ_DEFAULT_CONFIG = {
@@ -84,13 +84,13 @@ exports.timestamp = function(utcTime, tzUserConfig) {
 
 exports.timestampz = function(utcTime, tzUserConfig) {
 
-	//Note: you must clone the object here
-	var tz = (tzUserConfig && !isOptions(tzUserConfig))
-		? _.clone(tzUserConfig)
-		: _.clone(TZ_DEFAULT_CONFIG);
+	// Note: you must clone the object here
+	var tz = (tzUserConfig && !isOptions(tzUserConfig)) ? tzUserConfig : TZ_DEFAULT_CONFIG;
+	tz = _.clone(tz);
 
-	//only add timezone if not already has timezone
-	tz.format = (_.last(tz.format) === 'z')? tz.format : tz.format + ' z';
+	// only add timezone if not already has timezone
+	tz.format = (_.last(tz.format) === 'z') ? tz.format : tz.format + ' z';
+
 	return exports.timestamp(utcTime, tz);
 };
 
