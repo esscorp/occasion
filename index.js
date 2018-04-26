@@ -287,26 +287,26 @@ exports.auditOpenedClamped = function(date, range, tz) {
 	if (day <= lower) {
 		// late
 		return Moment
-		.tz(date, tz) // convert to client's timezone
-		.startOf('month')
-		.startOf('day')
-		.tz('UTC')
-		.format(FORMAT);
+			.tz(date, tz) // convert to client's timezone
+			.startOf('month')
+			.startOf('day')
+			.tz('UTC')
+			.format(FORMAT);
 	} else if (day >= upper) {
 		// early
 		return Moment
-		.tz(date, tz) // convert to client's timezone
-		.add(1, 'month')
-		.startOf('month')
-		.startOf('day')
-		.tz('UTC')
-		.format(FORMAT);
+			.tz(date, tz) // convert to client's timezone
+			.add(1, 'month')
+			.startOf('month')
+			.startOf('day')
+			.tz('UTC')
+			.format(FORMAT);
 	} else {
 		// not early or late so assume client wants explicit date
 		return Moment
-		.tz(date, tz) // convert to client's timezone
-		.tz('UTC')
-		.format(FORMAT);
+			.tz(date, tz) // convert to client's timezone
+			.tz('UTC')
+			.format(FORMAT);
 	}
 };
 
