@@ -5,7 +5,7 @@ var Moment = require('moment-timezone');
 var Prove = require('provejs-params');
 
 var FORMAT = 'YYYY-MM-DD HH:mm:ss';
-var tzDefaultConfig = {
+var TZ_DEFAULT_CONFIG = {
 	name: 'US/Central',
 	abbr: 'CST',
 	format: FORMAT
@@ -75,7 +75,7 @@ exports.datetime = function(datetime, format) {
 };
 
 exports.timestamp = function(utcTime, tzUserConfig) {
-	var cfg = (isOptions(tzUserConfig))? tzDefaultConfig : tzUserConfig;
+	var cfg = (isOptions(tzUserConfig))? TZ_DEFAULT_CONFIG : tzUserConfig;
 	var fmt = cfg.format;
 	var text = exports.convert(utcTime, 'UTC', cfg.name, fmt);
 
@@ -87,7 +87,7 @@ exports.timestampz = function(utcTime, tzUserConfig) {
 	//Note: you must clone the object here
 	var tz = (tzUserConfig && !isOptions(tzUserConfig))
 		? _.clone(tzUserConfig)
-		: _.clone(tzDefaultConfig);
+		: _.clone(TZ_DEFAULT_CONFIG);
 
 	//only add timezone if not already has timezone
 	tz.format = (_.last(tz.format) === 'z')? tz.format : tz.format + ' z';
