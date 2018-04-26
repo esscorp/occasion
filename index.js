@@ -48,8 +48,8 @@ exports.convertTimezone = function(date, tzFrom, tzTo, format) {
 	return exports.convert(date, tzFrom, tzTo, format);
 };
 
-exports.formatTimestamp = function(str) {
-	return exports.convertTimezone(str, 'UTC', 'UTC');
+exports.formatTimestamp = function(date) {
+	return exports.convertTimezone(date, 'UTC', 'UTC');
 };
 
 exports.now = function(format) {
@@ -67,26 +67,26 @@ exports.parseDaterange = function(daterange, index) {
 	return timestamp;
 };
 
-exports.datetime = function(datetime, format) {
+exports.datetime = function(date, format) {
 
-	if (!datetime) return '';
+	if (!date) return '';
 
 	if (!_.isString(format)) format = FORMAT;
 
-	var text = exports.convert(datetime, 'UTC', 'UTC', format);
+	var text = exports.convert(date, 'UTC', 'UTC', format);
 
 	return text;
 };
 
-exports.timestamp = function(utcTime, tzUserConfig) {
+exports.timestamp = function(date, tzUserConfig) {
 	var cfg = (isOptions(tzUserConfig)) ? TZ_DEFAULT_CONFIG : tzUserConfig;
 	var format = cfg.format;
-	var text = exports.convert(utcTime, 'UTC', cfg.name, format);
+	var text = exports.convert(date, 'UTC', cfg.name, format);
 
 	return text;
 };
 
-exports.timestampz = function(utcTime, tzUserConfig) {
+exports.timestampz = function(date, tzUserConfig) {
 
 	// Note: you must clone the object here
 	var tz = (tzUserConfig && !isOptions(tzUserConfig)) ? tzUserConfig : TZ_DEFAULT_CONFIG;
@@ -95,7 +95,7 @@ exports.timestampz = function(utcTime, tzUserConfig) {
 	// only add timezone if not already has timezone
 	tz.format = (_.last(tz.format) === 'z') ? tz.format : tz.format + ' z';
 
-	return exports.timestamp(utcTime, tz);
+	return exports.timestamp(date, tz);
 };
 
 /*
@@ -182,18 +182,18 @@ exports.duration = function(secs) {
 };
 
 // checks if string is a valid date
-exports.isDate = function(dateStr) {
+exports.isDate = function(date) {
 
-	if (_.isDate(dateStr)) return true;
+	if (_.isDate(date)) return true;
 
-	if (!dateStr) return false;
-	if (_.isFinite(dateStr)) return false;
+	if (!date) return false;
+	if (_.isFinite(date)) return false;
 
-	var isValid = Moment(new Date(dateStr)).isValid();
+	var isValid = Moment(new Date(date)).isValid();
 	if (!isValid) return false;
 
 	// because `Moment` thinks 'A lurking danger CE 476' is a valid date
-	var startsWithNumber = /^(\d)+/.test(dateStr);
+	var startsWithNumber = /^(\d)+/.test(date);
 	if (!startsWithNumber) return false;
 
 	return true;
