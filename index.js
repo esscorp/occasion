@@ -3,11 +3,12 @@
 var _ = require('underscore');
 var Moment = require('moment-timezone');
 var Prove = require('provejs-params');
+
 var FORMAT = 'YYYY-MM-DD HH:mm:ss';
 var tzDefaultConfig = {
 	name: 'US/Central',
 	abbr: 'CST',
-	format: 'YYYY-MM-DD HH:mm:ss'
+	format: FORMAT
 };
 
 /*
@@ -42,7 +43,7 @@ exports.convertTimezone = function(date, tzFrom, tzTo, fmt) {
 	if (_.isObject(tzTo) && tzTo.name) tzTo = tzTo.name;
 	if (!_.isString(tzTo)) tzTo = 'US/Central';
 
-	if (!_.isString(fmt)) fmt = 'YYYY-MM-DD HH:mm:ss';
+	if (!_.isString(fmt)) fmt = FORMAT;
 
 	return exports.convert(date, tzFrom, tzTo, fmt);
 };
@@ -68,7 +69,7 @@ exports.parseDaterange = function(daterange, index) {
 
 exports.datetime = function(datetime, format) {
 	if (!datetime) return '';
-	format = (_.isString(format))? format : 'YYYY-MM-DD HH:mm:ss';
+	format = (_.isString(format)) ? format : FORMAT;
 	var text = exports.convert(datetime, 'UTC', 'UTC', format);
 	return text;
 };
