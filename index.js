@@ -3,7 +3,7 @@
 var _ = require('underscore');
 var Moment = require('moment-timezone');
 var Prove = require('provejs-params');
-var format = 'YYYY-MM-DD HH:mm:ss';
+var FORMAT = 'YYYY-MM-DD HH:mm:ss';
 var tzDefaultConfig = {
 	name: 'US/Central',
 	abbr: 'CST',
@@ -119,7 +119,7 @@ exports.add = function(date, units, metric, fmt) {
 	if (!date) return date;
 
 	// set defaults
-	fmt = fmt || format;
+	fmt = fmt || FORMAT;
 
 	var moment = Moment.tz(date, 'UTC');
 	return moment.add(units, metric).format(fmt);
@@ -132,7 +132,7 @@ exports.subtract = function(date, units, metric, fmt) {
 	if (!date) return date;
 
 	// set defaults
-	fmt = fmt || format;
+	fmt = fmt || FORMAT;
 
 	var moment = Moment.tz(date, 'UTC');
 	return moment.subtract(units, metric).format(fmt);
@@ -145,7 +145,7 @@ exports.endOf = function(date, metric, fmt) {
 	if (!date) return date;
 
 	// set defaults
-	fmt = fmt || format;
+	fmt = fmt || FORMAT;
 
 	var moment = Moment.tz(date, 'UTC');
 	return moment.endOf(metric).format(fmt);
@@ -158,7 +158,7 @@ exports.startOf = function(date, metric, fmt) {
 	if (!date) return date;
 
 	// set defaults
-	fmt = fmt || format;
+	fmt = fmt || FORMAT;
 
 	var moment = Moment.tz(date, 'UTC');
 	return moment.startOf(metric).format(fmt);
@@ -263,7 +263,7 @@ exports.convert = function(date, tzFrom, tzTo, fmt) {
 	if (!date) return date;
 
 	// set defaults
-	fmt = fmt || format;
+	fmt = fmt || FORMAT;
 
 	return Moment.tz(date, tzFrom).tz(tzTo).format(fmt);
 };
@@ -292,7 +292,7 @@ exports.auditOpenedClamped = function(date, range, tz) {
 		.startOf('month')
 		.startOf('day')
 		.tz('UTC')
-		.format(format);
+		.format(FORMAT);
 	} else if (day >= upper) {
 		// early
 		return Moment
@@ -301,13 +301,13 @@ exports.auditOpenedClamped = function(date, range, tz) {
 		.startOf('month')
 		.startOf('day')
 		.tz('UTC')
-		.format(format);
+		.format(FORMAT);
 	} else {
 		// not early or late so assume client wants explicit date
 		return Moment
 		.tz(date, tz) // convert to client's timezone
 		.tz('UTC')
-		.format(format);
+		.format(FORMAT);
 	}
 };
 
@@ -327,7 +327,7 @@ exports.auditOpened = function(opened, tz) {
 		.tz(opened, tz)
 		.startOf('day')
 		.tz('UTC') // convert back to UTC
-		.format(format);
+		.format(FORMAT);
 	return ts;
 };
 
@@ -357,7 +357,7 @@ exports._auditExpired = function(opened, interval, tz) {
 		.subtract(1, 'day') // subtract one day because we are adding one day when call endOf('day')
 		.endOf('day') // audits expired at end of day in client's timezone
 		.tz('UTC') // convert back to UTC
-		.format(format);
+		.format(FORMAT);
 
 	return ts;
 };
@@ -376,7 +376,7 @@ exports._auditPeriodMax = function(expired) {
 
 	var ts = Moment
 		.tz(expired, 'UTC')
-		.format(format);
+		.format(FORMAT);
 
 	return  ts;
 };
@@ -406,7 +406,7 @@ exports._auditPeriodMin = function(period_max, interval, tz) {
 		.add(1, 'seconds') // change to start of next day/month
 		.subtract(inval.expr, inval.unit) // calculate min moment
 		.tz('UTC') // convert back to UTC
-		.format(format);
+		.format(FORMAT);
 
 	return  ts;
 };
@@ -427,7 +427,7 @@ exports._auditCarroverMax = function(period_min) {
 	var ts = Moment
 		.tz(period_min, 'UTC')
 		.subtract(1, 'second')
-		.format(format);
+		.format(FORMAT);
 
 	return  ts;
 };
@@ -457,7 +457,7 @@ exports._auditCarroverMin = function(carryover_max, interval, tz) {
 		.add(1, 'seconds') // change to start of next day/month
 		.subtract(inval.expr, inval.unit) // calculate min moment
 		.tz('UTC') // convert back to UTC
-		.format(format);
+		.format(FORMAT);
 
 	return  ts;
 };
