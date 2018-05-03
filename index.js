@@ -376,7 +376,7 @@ exports._auditPeriodMax = function(expired) {
 		.tz(expired, 'UTC')
 		.format(FORMAT);
 
-	return  ts;
+	return ts;
 };
 
 /**
@@ -406,7 +406,7 @@ exports._auditPeriodMin = function(period_max, interval, tz) {
 		.tz('UTC') // convert back to UTC
 		.format(FORMAT);
 
-	return  ts;
+	return ts;
 };
 
 /**
@@ -427,7 +427,7 @@ exports._auditCarroverMax = function(period_min) {
 		.subtract(1, 'second')
 		.format(FORMAT);
 
-	return  ts;
+	return ts;
 };
 
 /**
@@ -457,7 +457,7 @@ exports._auditCarroverMin = function(carryover_max, interval, tz) {
 		.tz('UTC') // convert back to UTC
 		.format(FORMAT);
 
-	return  ts;
+	return ts;
 };
 
 /**
@@ -474,15 +474,13 @@ exports.auditRecipe = function(opened, interval_open, interval_licet, interval_c
 
 	Prove('SSSsS', arguments);
 
-	var expired, period_max, period_min, carryover_max, carryover_min;
-
 	opened = exports.toISOString(opened);
 	opened = exports.auditOpened(opened, tz);
-	expired = exports._auditExpired(opened, interval_open, tz);
-	period_max = exports._auditPeriodMax(expired);
-	period_min = exports._auditPeriodMin(period_max, interval_licet, tz);
-	if (interval_carry) carryover_max = exports._auditCarroverMax(period_min);
-	if (interval_carry) carryover_min = exports._auditCarroverMin(carryover_max, interval_carry, tz);
+	var expired = exports._auditExpired(opened, interval_open, tz);
+	var period_max = exports._auditPeriodMax(expired);
+	var period_min = exports._auditPeriodMin(period_max, interval_licet, tz);
+	var carryover_max = (interval_carry) ? exports._auditCarroverMax(period_min) : null;
+	var carryover_min = (interval_carry) ? exports._auditCarroverMin(carryover_max, interval_carry, tz): null;
 
 	return {
 		opened: opened,
