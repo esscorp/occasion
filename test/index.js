@@ -53,7 +53,6 @@ describe('Tests', function() {
 	*/
 	describe('Audit Recipe: 1 MONTH, Opened 3/1/2017', function() {
 
-		var tz = 'US/Central';
 		var opened = '3/1/2017';
 		var interval_open = '1 MONTHS';
 		var interval_licet = '1 MONTHS';
@@ -105,7 +104,6 @@ describe('Tests', function() {
 
 	describe('Occasion.auditRecipe(`3/1/2017`)', function() {
 
-		var tz = 'US/Central';
 		var opened = '3/1/2017';
 		var interval_open = '1 MONTHS';
 		var interval_licet = '1 MONTHS';
