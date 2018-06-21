@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/esscorp/timestamps#readme",
   "dependencies": {
-    "moment-timezone": "^0.5.13",
+    "moment-timezone": "^0.5.20",
     "provejs-params": "^1.0.1",
     "underscore": "^1.9.1"
   },
