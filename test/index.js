@@ -58,7 +58,11 @@ describe('Tests', function() {
 		var interval_open = '1 MONTHS';
 		var interval_licet = '1 MONTHS';
 		var interval_carry = '1 MONTHS';
-		var expired, period_max, period_min, carryover_max, carryover_min;
+		var expired;
+		var period_max;
+		var period_min;
+		var carryover_max;
+		var carryover_min;
 
 		it('expect opened converted to `2017-03-01`', function() {
 			opened = Occasion.toISOString(opened);
