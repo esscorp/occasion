@@ -3,8 +3,8 @@
 var Assert = require('assert');
 var Occasion = require('..');
 
-var tz = 'US/Central';
-var range = 7;
+var TZ = 'US/Central';
+var RANGE = 7;
 
 describe('Tests', function() {
 	describe('exports.toISOString()', function() {
@@ -39,10 +39,10 @@ describe('Tests', function() {
 
 	describe('exports.auditOpenedClamped()', function() {
 		it('should return 2000-01-01 06:00:00 when the value is new `2000-01-02`', function() {
-			Assert.equal(Occasion.auditOpenedClamped('2000-01-02', range, tz), '2000-01-01 06:00:00');
+			Assert.equal(Occasion.auditOpenedClamped('2000-01-02', RANGE, TZ), '2000-01-01 06:00:00');
 		});
 		it('should return 2000-01-01 06:00:00 when the value is new Date(1999-12-30)', function() {
-			Assert.equal(Occasion.auditOpenedClamped('1999-12-30', range, tz), '2000-01-01 06:00:00');
+			Assert.equal(Occasion.auditOpenedClamped('1999-12-30', RANGE, TZ), '2000-01-01 06:00:00');
 		});
 	});
 
@@ -68,12 +68,12 @@ describe('Tests', function() {
 			Assert.equal(opened, '2017-03-01');
 		});
 		it('expect opened of 2017-03-01 06:00:00 UTC', function() {
-			opened = Occasion.auditOpened(opened, tz);
+			opened = Occasion.auditOpened(opened, TZ);
 			Assert.equal(opened, '2017-03-01 06:00:00');
 		});
 
 		it('closes of 2017-04-01 04:59:59 UTC', function() {
-			expired = Occasion._auditExpired(opened, interval_open, tz);
+			expired = Occasion._auditExpired(opened, interval_open, TZ);
 			Assert.equal(expired, '2017-04-01 04:59:59');
 		});
 
@@ -83,7 +83,7 @@ describe('Tests', function() {
 		});
 
 		it('period_min of 2017-03-01 06:00:00 UTC', function() {
-			period_min = Occasion._auditPeriodMin(period_max, interval_licet, tz);
+			period_min = Occasion._auditPeriodMin(period_max, interval_licet, TZ);
 			Assert.equal(period_min, '2017-03-01 06:00:00');
 		});
 
@@ -97,7 +97,7 @@ describe('Tests', function() {
 		});
 
 		it('carryover_min of 2017-02-01 06:00:00 UTC', function() {
-			carryover_min = Occasion._auditCarroverMin(carryover_max, interval_carry, tz);
+			carryover_min = Occasion._auditCarroverMin(carryover_max, interval_carry, TZ);
 			Assert.equal(carryover_min, '2017-02-01 06:00:00');
 		});
 	});
@@ -109,7 +109,7 @@ describe('Tests', function() {
 		var interval_licet = '1 MONTHS';
 		var interval_carry = '1 MONTHS';
 
-		var recipe = Occasion.auditRecipe(opened, interval_open, interval_licet, interval_carry, tz);
+		var recipe = Occasion.auditRecipe(opened, interval_open, interval_licet, interval_carry, TZ);
 
 		it('expect opened of 2017-03-01 06:00:00 UTC', function() {
 			Assert.equal(recipe.opened, '2017-03-01 06:00:00');
