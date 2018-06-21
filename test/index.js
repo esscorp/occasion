@@ -199,7 +199,8 @@ describe('Tests', function() {
 	describe('Occasion.zoneAbbr', function() {
 
 		it('test for America/Chicago', function() {
-			Assert.strictEqual('CST', Occasion.zoneAbbr('America/Chicago'));
+			var zoneAbbr = Occasion.zoneAbbr('America/Chicago');
+			Assert.ok(zoneAbbr === 'CST' || zoneAbbr === 'CDT', zoneAbbr);
 		});
 	});
 });
