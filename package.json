@@ -19,7 +19,7 @@
   "dependencies": {
     "moment-timezone": "^0.5.13",
     "provejs-params": "^1.0.1",
-    "underscore": "^1.8.3"
+    "underscore": "^1.9.1"
   },
   "devDependencies": {
     "@esscorp/eslint": "^2.7.0",
