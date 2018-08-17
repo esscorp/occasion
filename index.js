@@ -22,6 +22,17 @@ exports.convertTimezone = function(date, tzFrom, tzTo, format) {
 	return exports._convert(date, tzFrom, tzTo, format);
 };
 
+exports._tzName = function(cfg, defolt) {
+	if (_.isObject(cfg) && cfg.name) return cfg.name;
+	if (_.isString(cfg)) return cfg;
+	return defolt;
+};
+
+exports._tzFormat = function(cfg) {
+	if (_.isObject(cfg) && cfg.format) return cfg.format;
+	return FORMAT;
+};
+
 exports.formatTimestamp = function(date) {
 	return exports.convertTimezone(date, 'UTC', 'UTC');
 };
@@ -70,17 +81,6 @@ exports.timestampz = function(date, tzConfig) {
 	if (_.last(format) !== 'z') format = format + ' z';
 
 	return exports._convert(date, tzFrom, tzTo, format);
-};
-
-exports._tzName = function(cfg, defolt) {
-	if (_.isObject(cfg) && cfg.name) return cfg.name;
-	if (_.isString(cfg)) return cfg;
-	return defolt;
-};
-
-exports._tzFormat = function(cfg) {
-	if (_.isObject(cfg) && cfg.format) return cfg.format;
-	return FORMAT;
 };
 
 exports.diff = function(from, to, metric) {
