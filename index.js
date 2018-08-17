@@ -5,11 +5,6 @@ var Prove = require('provejs-params');
 var Moment = require('moment-timezone');
 
 var FORMAT = 'YYYY-MM-DD HH:mm:ss';
-var TZ_DEFAULT_CONFIG = {
-	name: 'US/Central',
-	abbr: 'CST',
-	format: FORMAT
-};
 
 /*
 	Pulled from users helpers
@@ -24,26 +19,15 @@ exports.clockDrift = function() {
 /*
 	Pulled from admin helpers
 */
-function isOptions(obj) {
-	if (!_.isObject(obj)) return false;
-	if (!_.has(obj, 'data')) return false;
-	if (!_.has(obj, 'name')) return false;
-	return true;
-}
 
 exports.convertTimezone = function(date, tzFrom, tzTo, format) {
 
 	// return early
 	if (!date) return date;
 
-	// set defaults
-	if (_.isObject(tzFrom) && tzFrom.name) tzFrom = tzFrom.name;
-	if (!_.isString(tzFrom)) tzFrom = 'UTC';
-
-	if (_.isObject(tzTo) && tzTo.name) tzTo = tzTo.name;
-	if (!_.isString(tzTo)) tzTo = 'US/Central';
-
-	if (!_.isString(format)) format = FORMAT;
+	tzFrom = exports._tzName(tzFrom, 'UTC');
+	tzTo = exports._tzName(tzTo, 'US/Central');
+	format = exports._tzFormat(format);
 
 	return exports._convert(date, tzFrom, tzTo, format);
 };
@@ -78,24 +62,35 @@ exports.datetime = function(date, format) {
 	return text;
 };
 
-exports.timestamp = function(date, tzUserConfig) {
-	var cfg = (isOptions(tzUserConfig)) ? TZ_DEFAULT_CONFIG : tzUserConfig;
-	var format = cfg.format;
-	var text = exports._convert(date, 'UTC', cfg.name, format);
+exports.timestamp = function(date, tzConfig) {
 
-	return text;
+	var tzFrom = 'UTC';
+	var tzTo = exports._tzName(tzConfig, 'US/Central');
+	var format = exports._tzFormat(tzConfig);
+
+	return exports._convert(date, tzFrom, tzTo, format);
 };
 
-exports.timestampz = function(date, tzUserConfig) {
+exports.timestampz = function(date, tzConfig) {
 
-	// Note: you must clone the object here
-	var tz = (tzUserConfig && !isOptions(tzUserConfig)) ? tzUserConfig : TZ_DEFAULT_CONFIG;
-	tz = _.clone(tz);
+	var tzFrom = 'UTC';
+	var tzTo = exports._tzName(tzConfig, 'US/Central');
+	var format = exports._tzFormat(tzConfig);
 
-	// only add timezone if not already has timezone
-	tz.format = (_.last(tz.format) === 'z') ? tz.format : tz.format + ' z';
+	if (_.last(format) !== 'z') format = format + ' z';
 
-	return exports.timestamp(date, tz);
+	return exports._convert(date, tzFrom, tzTo, format);
+};
+
+exports._tzName = function(cfg, defolt) {
+	if (_.isObject(cfg) && cfg.name) return cfg.name;
+	if (_.isString(cfg)) return cfg;
+	return defolt;
+};
+
+exports._tzFormat = function(cfg) {
+	if (_.isObject(cfg) && cfg.format) return cfg.format;
+	return FORMAT;
 };
 
 /*
