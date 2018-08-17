@@ -6,19 +6,9 @@ var Moment = require('moment-timezone');
 
 var FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
-/*
-	Pulled from users helpers
-*/
 exports.clockDrift = function() {
 	return Moment().format('x');
 };
-/*
-	end of users helpers
-*/
-
-/*
-	Pulled from admin helpers
-*/
 
 exports.convertTimezone = function(date, tzFrom, tzTo, format) {
 
@@ -92,10 +82,6 @@ exports._tzFormat = function(cfg) {
 	if (_.isObject(cfg) && cfg.format) return cfg.format;
 	return FORMAT;
 };
-
-/*
-	end of admin helpers
-*/
 
 exports.diff = function(from, to, metric) {
 	var toMoment = Moment(to);
